@@ -1,5 +1,8 @@
 var canvas, ctx;
 
+var score;
+var scoreLabel;
+
 var bird;
 var gravity;
 
@@ -9,8 +12,12 @@ function start() {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
 
+    scoreLabel = document.getElementById("score");
+
     canvas.width = 1000;
     canvas.height = 600;
+
+    score = 0;
 
     bird = new Bird(200, canvas.height/2);
 
@@ -28,6 +35,8 @@ function start() {
 function restart() {
     bird = new Bird(200, canvas.height/2);
     pipes = [];
+
+    score = 0;
 }
 
 function keyInput(event) {
@@ -64,6 +73,15 @@ function update() {
             restart();
         }
     }
+
+    // increase score
+    for (let i = 0; i < pipes.length; i++) {
+        if (pipes[i].isPassed == false && bird.x > pipes[i].x + pipes[i].size) {
+            pipes[i].isPassed = true;
+            score++;
+            break;
+        }
+    }
 }
 
 function draw() {
@@ -76,6 +94,8 @@ function draw() {
     }
 
     bird.draw();
+
+    scoreLabel.innerHTML = score;
 }
 
 class Bird {
@@ -125,6 +145,7 @@ class Pipe {
         this.size = 150;
         this.speed = 3;
 
+        this.isPassed = false;
     }
 
     update() {

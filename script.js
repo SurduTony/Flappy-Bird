@@ -69,7 +69,8 @@ function update() {
 
     // collision with pipes
     for (let i = 0; i < pipes.length; i++) {
-        if (bird.x > pipes[i].x && bird.x < pipes[i].x + pipes[i].size && (bird.y < pipes[i].y || bird.y > pipes[i].y + pipes[i].gap)) {
+        if (bird.x + bird.size > pipes[i].x && bird.x - bird.size < pipes[i].x + pipes[i].size && 
+            (bird.y - bird.size < pipes[i].y || bird.y + bird.size > pipes[i].y + pipes[i].gap)) {
             restart();
         }
     }

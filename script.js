@@ -14,12 +14,13 @@ function start() {
 
     bird = new Bird(200, canvas.height/2);
 
-    pipes[0] = new Pipe(canvas.width);
-
     gravity = 0.2;
 
     // input
     addEventListener("keypress", keyInput, false);
+
+    // spawn pipes
+    setInterval(function(){pipes.push(new Pipe(canvas.width))}, 1500);
 
     setInterval(gameLoop, 10);
 }
@@ -43,6 +44,14 @@ function update() {
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].update();
     }
+
+    // delete pipes outside the screen
+    for (let i = pipes.length-1; i >= 0; i--) {
+        if (pipes[i].x < -100) {
+            delete(pipes[i]);
+            pipes.splice(i, 1);
+        }
+    }
 }
 
 function draw() {
@@ -51,8 +60,6 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     bird.draw();
-
-    pipes[0].draw();
 
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].draw();
@@ -98,12 +105,13 @@ class Bird {
 
 class Pipe {
     constructor(x) {
+        this.gap = 200; // gap between the top and bottom pipe
+
         this.x = x;
-        this.y = canvas.height/2; // where the top pipe stops
+        this.y = Math.floor(Math.random() * (canvas.height-this.gap-100) + 50); // where the top pipe stops
 
         this.size = 150;
         this.speed = 3;
-        this.gap = 200; // gap between the top and bottom pipe
 
     }
 

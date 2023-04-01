@@ -21,15 +21,17 @@ function start() {
 
     bird = new Bird(200, canvas.height/2);
 
-    gravity = 0.2;
+    gravity = 0.09;
+
+    TextureLoader.loadTextures();
 
     // input
     addEventListener("keypress", keyInput, false);
 
     // spawn pipes
-    setInterval(function(){pipes.push(new Pipe(canvas.width))}, 1500);
+    setInterval(function(){pipes.push(new Pipe(canvas.width))}, 1100);
 
-    setInterval(gameLoop, 10);
+    setInterval(gameLoop, 5);
 }
 
 function restart() {
@@ -90,6 +92,9 @@ function draw() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/2, canvas.height);
+    ctx.drawImage(TextureLoader.backgroundImage, canvas.width/2, 0, canvas.width/2, canvas.height);
+
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].draw();
     }
@@ -129,10 +134,12 @@ class Bird {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
         ctx.fill();
+
+        ctx.drawImage(TextureLoader.birdTexture, this.x-this.size-10, this.y-this.size, this.size*3, this.size*2);
     }
 
     flap() {
-        this.yVelocity = -6;
+        this.yVelocity = -4.5;
     }
 }
 
@@ -144,7 +151,7 @@ class Pipe {
         this.y = Math.floor(Math.random() * (canvas.height-this.gap-100) + 50); // where the top pipe stops
 
         this.size = 150;
-        this.speed = 3;
+        this.speed = 2;
 
         this.isPassed = false;
     }
@@ -155,8 +162,43 @@ class Pipe {
 
     draw() {
         ctx.fillStyle = "green";
-        ctx.fillRect(this.x, 0, this.size, this.y);
+        
+        //ctx.fillRect(this.x, 0, this.size, this.y);
+        //ctx.fillRect(this.x, this.y + this.gap, this.size, canvas.height);
+        
+        ctx.drawImage(TextureLoader.pipeTextureRotated, this.x, 0, this.size, this.y);
 
-        ctx.fillRect(this.x, this.y + this.gap, this.size, canvas.height);
+        ctx.drawImage(TextureLoader.pipeTexture, this.x, this.y + this.gap, this.size, canvas.height);
+    }
+}
+
+class TextureLoader {
+    static birdTexture;
+    static pipeTexture;
+    static pipeTextureRotated;
+    static backgroundImage;
+
+    static loadTextures() {
+        this.#loadBirdTexture();
+        this.#loadPipeTexture();
+        this.#loadBackground();
+    }
+
+    static #loadBirdTexture() {
+        this.birdTexture = new Image();
+        this.birdTexture.src = "./sprites/yellowbird-midflap.png";
+    }
+
+    static #loadPipeTexture() {
+        this.pipeTexture = new Image();
+        this.pipeTexture.src = "./sprites/pipe-green.png";
+
+        this.pipeTextureRotated = new Image();
+        this.pipeTextureRotated.src = "./sprites/pipe-green-rotated.png";
+    }
+
+    static #loadBackground() {
+        this.backgroundImage = new Image();
+        this.backgroundImage.src = "./sprites/background-day.png";
     }
 }

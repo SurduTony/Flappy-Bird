@@ -8,6 +8,12 @@ var gravity;
 
 var pipes = [];
 
+// sounds
+var wingSound = new Audio("./sounds/wing.ogg");
+var pointSound = new Audio("./sounds/point.ogg");
+var hitSound = new Audio("./sounds/hit.ogg");
+var deathSound = new Audio("./sounds/die.ogg");
+
 function start() {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
@@ -25,7 +31,7 @@ function start() {
 
     TextureLoader.loadTextures();
 
-    // input
+    // keyboard input
     addEventListener("keypress", keyInput, false);
 
     // spawn pipes
@@ -45,6 +51,7 @@ function keyInput(event) {
     switch (event.key) {
         case ' ':
             bird.flap();
+            wingSound.play();
         break;
     }
 }
@@ -73,7 +80,9 @@ function update() {
     for (let i = 0; i < pipes.length; i++) {
         if (bird.x + bird.size > pipes[i].x && bird.x - bird.size < pipes[i].x + pipes[i].size && 
             (bird.y - bird.size < pipes[i].y || bird.y + bird.size > pipes[i].y + pipes[i].gap)) {
-            restart();
+                hitSound.play();
+                deathSound.play();
+                restart();
         }
     }
 
@@ -82,6 +91,7 @@ function update() {
         if (pipes[i].isPassed == false && bird.x > pipes[i].x + pipes[i].size) {
             pipes[i].isPassed = true;
             score++;
+            pointSound.play();
             break;
         }
     }
@@ -92,8 +102,9 @@ function draw() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/2, canvas.height);
-    ctx.drawImage(TextureLoader.backgroundImage, canvas.width/2, 0, canvas.width/2, canvas.height);
+    ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/3, canvas.height);
+    ctx.drawImage(TextureLoader.backgroundImage, canvas.width/3-1, 0, canvas.width/3, canvas.height);
+    ctx.drawImage(TextureLoader.backgroundImage, 2*canvas.width/3-2, 0, canvas.width/3+2, canvas.height);
 
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].draw();

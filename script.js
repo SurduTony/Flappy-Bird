@@ -25,6 +25,11 @@ function start() {
     setInterval(gameLoop, 10);
 }
 
+function restart() {
+    bird = new Bird(200, canvas.height/2);
+    pipes = [];
+}
+
 function keyInput(event) {
     switch (event.key) {
         case ' ':
@@ -47,9 +52,16 @@ function update() {
 
     // delete pipes outside the screen
     for (let i = pipes.length-1; i >= 0; i--) {
-        if (pipes[i].x < -100) {
+        if (pipes[i].x < -200) {
             delete(pipes[i]);
             pipes.splice(i, 1);
+        }
+    }
+
+    // collision with pipes
+    for (let i = 0; i < pipes.length; i++) {
+        if (bird.x > pipes[i].x && bird.x < pipes[i].x + pipes[i].size && (bird.y < pipes[i].y || bird.y > pipes[i].y + pipes[i].gap)) {
+            restart();
         }
     }
 }
@@ -59,11 +71,11 @@ function draw() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    bird.draw();
-
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].draw();
     }
+
+    bird.draw();
 }
 
 class Bird {

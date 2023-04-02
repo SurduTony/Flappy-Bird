@@ -1,4 +1,8 @@
 p {
     font-size: 30px; 
-    padding-left: 450px;
+    padding-left: 400px;
+}
+
+label {
+    padding-right: 50px;
 }

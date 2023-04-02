@@ -1,7 +1,7 @@
 var canvas, ctx;
 
-var score;
-var scoreLabel;
+var score, highScore;
+var scoreLabel, highScoreLabel;
 
 var bird;
 var gravity;
@@ -19,11 +19,13 @@ function start() {
     ctx = canvas.getContext("2d");
 
     scoreLabel = document.getElementById("score");
+    highScoreLabel = document.getElementById("highScore");
 
     canvas.width = 1000;
     canvas.height = 600;
 
     score = 0;
+    highScore = 0;
 
     bird = new Bird(200, canvas.height/2);
 
@@ -79,9 +81,16 @@ function update() {
     // collision with pipes
     for (let i = 0; i < pipes.length; i++) {
         if (bird.x + bird.size > pipes[i].x && bird.x - bird.size < pipes[i].x + pipes[i].size && 
-            (bird.y - bird.size < pipes[i].y || bird.y + bird.size > pipes[i].y + pipes[i].gap)) {
+            (bird.y - bird.size < pipes[i].y || bird.y + bird.size > pipes[i].y + pipes[i].gap + 5)) {
                 hitSound.play();
                 deathSound.play();
+
+                // calculate highscore
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreLabel.innerHTML = highScore;
+                }
+
                 restart();
         }
     }
@@ -99,9 +108,6 @@ function update() {
 
 function draw() {
     // draw background
-    ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/3, canvas.height);
     ctx.drawImage(TextureLoader.backgroundImage, canvas.width/3-1, 0, canvas.width/3, canvas.height);
     ctx.drawImage(TextureLoader.backgroundImage, 2*canvas.width/3-2, 0, canvas.width/3+2, canvas.height);

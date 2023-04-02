@@ -1,3 +1,4 @@
+import {MenuState, MenuManager} from "./menuManager.js";
 import {TextureLoader} from "./textureLoader.js";
 import {Bird} from "./bird.js";
 import {Pipe} from "./pipe.js";
@@ -15,6 +16,8 @@ var pointSound = new Audio("./sounds/point.ogg");
 var hitSound = new Audio("./sounds/hit.ogg");
 var deathSound = new Audio("./sounds/die.ogg");
 
+var menuManager;
+
 start();
 
 function start() {
@@ -22,6 +25,8 @@ function start() {
     ctx = canvas.getContext("2d");
 
     TextureLoader.loadTextures();
+
+    menuManager = new MenuManager();
 
     scoreLabel = document.getElementById("score");
     highScoreLabel = document.getElementById("highScore");
@@ -49,13 +54,20 @@ function restart() {
     pipes = [];
 
     score = 0;
+
+    inMenu = false;
 }
 
 function keyInput(event) {
     switch (event.key) {
         case ' ':
-            bird.flap();
-            wingSound.play();
+            if (inMenu) {
+                restart();
+            }
+            else {
+                bird.flap();
+                wingSound.play();
+            }
         break;
     }
 }
@@ -66,6 +78,15 @@ function gameLoop() {
 }
 
 function update() {
+    if (inMenu) {
+
+    }
+    else {
+        updateGame();
+    }
+}
+
+function updateGame() {
     bird.update();
 
     for (let i = 0; i < pipes.length; i++) {
@@ -94,6 +115,9 @@ function update() {
                 }
 
                 restart();
+
+                menuManager.currState = MenuState.gameover;
+                inMenu = true;
         }
     }
 
@@ -109,16 +133,21 @@ function update() {
 }
 
 function draw() {
-    // draw background
-    ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/3, canvas.height);
-    ctx.drawImage(TextureLoader.backgroundImage, canvas.width/3-1, 0, canvas.width/3, canvas.height);
-    ctx.drawImage(TextureLoader.backgroundImage, 2*canvas.width/3-2, 0, canvas.width/3+2, canvas.height);
-
-    for (let i = 0; i < pipes.length; i++) {
-        pipes[i].draw();
+    if (inMenu) {
+        menuManager.draw();
     }
+    else {
+        // draw background
+        ctx.drawImage(TextureLoader.backgroundImage, 0, 0, canvas.width/3, canvas.height);
+        ctx.drawImage(TextureLoader.backgroundImage, canvas.width/3-1, 0, canvas.width/3, canvas.height);
+        ctx.drawImage(TextureLoader.backgroundImage, 2*canvas.width/3-2, 0, canvas.width/3+2, canvas.height);
 
-    bird.draw();
+        for (let i = 0; i < pipes.length; i++) {
+            pipes[i].draw();
+        }
 
-    scoreLabel.innerHTML = score;
+        bird.draw();
+
+        scoreLabel.innerHTML = score;
+    }
 }

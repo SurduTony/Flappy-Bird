@@ -6,14 +6,16 @@ export class TextureLoader {
     static pipeTexture;
     static pipeTextureRotated;
     static backgroundImage;
+    static gameOverImage;
 
     static loadTextures() {
-        this.#loadBirdTexture();
-        this.#loadPipeTexture();
+        this.#loadBirdTextures();
+        this.#loadPipeTextures();
         this.#loadBackground();
+        this.#loadMenuTextures();
     }
 
-    static #loadBirdTexture() {
+    static #loadBirdTextures() {
         this.bird_upflap_texture = new Image();
         this.bird_upflap_texture.src = "./sprites/yellowbird-upflap.png";
 
@@ -24,7 +26,7 @@ export class TextureLoader {
         this.bird_downflap_texture.src = "./sprites/yellowbird-downflap.png";
     }
 
-    static #loadPipeTexture() {
+    static #loadPipeTextures() {
         this.pipeTexture = new Image();
         this.pipeTexture.src = "./sprites/pipe-green.png";
 
@@ -35,5 +37,10 @@ export class TextureLoader {
     static #loadBackground() {
         this.backgroundImage = new Image();
         this.backgroundImage.src = "./sprites/background-day.png";
+    }
+
+    static #loadMenuTextures() {
+        this.gameOverImage = new Image();
+        this.gameOverImage.src = "./sprites/gameover.png";
     }
 }

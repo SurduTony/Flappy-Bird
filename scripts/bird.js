@@ -32,9 +32,11 @@ export class Bird {
     draw() {
         ctx.fillStyle = "white";
 
+        /*
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
         ctx.fill();
+        */
 
         ctx.drawImage(this.animator.currFrame(), this.x-this.size-10, this.y-this.size, this.size*3, this.size*2);
     }

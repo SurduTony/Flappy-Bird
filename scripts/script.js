@@ -21,6 +21,8 @@ function start() {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
 
+    TextureLoader.loadTextures();
+
     scoreLabel = document.getElementById("score");
     highScoreLabel = document.getElementById("highScore");
 
@@ -32,8 +34,6 @@ function start() {
 
     bird = new Bird(200, canvas.height/2);
 
-    TextureLoader.loadTextures();
-
     // keyboard input
     addEventListener("keypress", keyInput, false);
 
@@ -44,7 +44,8 @@ function start() {
 }
 
 function restart() {
-    bird = new Bird(200, canvas.height/2);
+    bird.x = 200;
+    bird.y = canvas.height/2;
     pipes = [];
 
     score = 0;

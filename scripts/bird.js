@@ -1,4 +1,5 @@
 import {TextureLoader} from "./textureLoader.js";
+import {Animator} from "./animator.js";
 
 export class Bird {
     constructor(x, y) {
@@ -8,6 +9,10 @@ export class Bird {
         this.yVelocity = 0;
 
         this.size = 20;
+
+        this.animator = new Animator(
+            [TextureLoader.bird_upflap_texture, TextureLoader.bird_midflap_texture, TextureLoader.bird_downflap_texture, TextureLoader.bird_midflap_texture]
+        );
     }
 
     update() {
@@ -31,7 +36,7 @@ export class Bird {
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
         ctx.fill();
 
-        ctx.drawImage(TextureLoader.birdTexture, this.x-this.size-10, this.y-this.size, this.size*3, this.size*2);
+        ctx.drawImage(this.animator.currFrame(), this.x-this.size-10, this.y-this.size, this.size*3, this.size*2);
     }
 
     flap() {

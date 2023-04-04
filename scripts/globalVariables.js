@@ -1,3 +1,3 @@
 var canvas, ctx;
 var gravity = 0.09;
-var inMenu = false;
+var inMenu = true;

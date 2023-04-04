@@ -7,6 +7,7 @@ export class TextureLoader {
     static pipeTextureRotated;
     static backgroundImage;
     static gameOverImage;
+    static mainMenuImage;
 
     static loadTextures() {
         this.#loadBirdTextures();
@@ -40,6 +41,9 @@ export class TextureLoader {
     }
 
     static #loadMenuTextures() {
+        this.mainMenuImage = new Image();
+        this.mainMenuImage.src = "./sprites/main-menu.jpg";
+
         this.gameOverImage = new Image();
         this.gameOverImage.src = "./sprites/gameover.png";
     }

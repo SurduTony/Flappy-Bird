@@ -28,6 +28,8 @@ function start() {
 
     menuManager = new MenuManager();
 
+    menuManager.currState = MenuState.mainMenu;
+
     scoreLabel = document.getElementById("score");
     highScoreLabel = document.getElementById("highScore");
 

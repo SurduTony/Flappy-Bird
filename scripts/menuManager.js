@@ -1,7 +1,8 @@
 import { TextureLoader } from "./textureLoader.js";
 
 export var MenuState = {
-    gameover: 0
+    mainMenu: 0,
+    gameover: 1
 }
 
 export class MenuManager {
@@ -10,7 +11,19 @@ export class MenuManager {
     }
 
     draw() {
-        this.#drawDeathMenu();
+        switch (this.currState) {
+            case MenuState.mainMenu:
+                this.#drawMainMenu();
+            break;
+
+            case MenuState.gameover:
+                this.#drawDeathMenu();
+            break;
+        }
+    }
+
+    #drawMainMenu() {
+        ctx.drawImage(TextureLoader.mainMenuImage, 0, 0, canvas.width, canvas.height);
     }
 
     #drawDeathMenu() {
